@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRoomba : BaseCharacter
+public class PlayerDrone : MonoBehaviour
 {
     [SerializeField]
     private float m_forwardSpeed = 10.0f;
@@ -12,6 +12,11 @@ public class PlayerRoomba : BaseCharacter
     private float m_rotationSpeed = 3.0f;
 
     private Rigidbody m_rbCharacter = null;
+    [SerializeField]
+    private GameObject m_charaterModelHolder = null;
+
+    [SerializeField]
+    private float m_leanAmount = 1.0f;
 
     // Use this for initialization
     void Start ()
@@ -30,5 +35,6 @@ public class PlayerRoomba : BaseCharacter
         m_rbCharacter.velocity = transform.forward * inputForwards * m_forwardSpeed + transform.right * inputStrafe * m_strafeSpeed;
 
         transform.Rotate(Vector3.up * Time.deltaTime * inputRotation * m_rotationSpeed);
+        m_charaterModelHolder.transform.rotation = Quaternion.Euler(inputForwards * m_leanAmount, 0.0f, -inputStrafe * m_leanAmount);
     }
 }
