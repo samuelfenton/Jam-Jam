@@ -14,6 +14,8 @@ public class UI : MonoBehaviour
     private Image m_Search;
     private Image m_Identified;
 
+
+    //the times between alerts anti-virus happen 
     [SerializeField]
     private float m_FirstThreat;
     private float m_SecondThreat;
