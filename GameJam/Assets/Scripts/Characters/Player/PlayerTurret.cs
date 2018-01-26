@@ -11,7 +11,9 @@ public class PlayerTurret : PlayerRobot
     private float m_clampPitchAngle = 75.0f;
 
     [SerializeField]
-    private GameObject m_charaterModelHolder = null;
+    private GameObject m_turretBaseModel = null;
+    [SerializeField]
+    private GameObject m_turretGunModel = null;
 
     [SerializeField]
     private Vector3 m_bulletSpawnPos = Vector3.zero;
@@ -32,26 +34,33 @@ public class PlayerTurret : PlayerRobot
         float inputMouseX = Input.GetAxis("Mouse X");
         float inputMouseY = Input.GetAxis("Mouse Y");
 
-        Vector3 localEulerAngle = m_charaterModelHolder.transform.localEulerAngles;
+        //Update pitch
+        Vector3 localEulerGun = m_turretGunModel.transform.localEulerAngles;
 
         //Pitch
-        localEulerAngle.x -= inputMouseY * m_rotationSpeed;
+        localEulerGun.x -= inputMouseY * m_rotationSpeed;
 
         //Clamp pitch
-        if (localEulerAngle.x > m_clampPitchAngle && localEulerAngle.x <180)
-            localEulerAngle.x = m_clampPitchAngle;
+        if (localEulerGun.x > m_clampPitchAngle && localEulerGun.x <180)
+            localEulerGun.x = m_clampPitchAngle;
 
-        if (localEulerAngle.x < 360 - m_clampPitchAngle && localEulerAngle.x > 180)
-            localEulerAngle.x = -m_clampPitchAngle;
+        if (localEulerGun.x < 360 - m_clampPitchAngle && localEulerGun.x > 180)
+            localEulerGun.x = -m_clampPitchAngle;
+
+        m_turretGunModel.transform.localEulerAngles = localEulerGun;
 
         //Yaw
-        localEulerAngle.y += inputMouseX * m_rotationSpeed;
-        localEulerAngle.z = 0.0f;
-        m_charaterModelHolder.transform.localEulerAngles = localEulerAngle;
+        //Update Yaw
+        Vector3 localEulerBase = m_turretBaseModel.transform.localEulerAngles;
+
+        localEulerBase.y += inputMouseX * m_rotationSpeed;
+        localEulerBase.z = 0.0f;
+
+        m_turretBaseModel.transform.localEulerAngles = localEulerBase;
 
         if (Input.GetAxisRaw("Fire1")!=0.0f && m_canFire)//Fire bullet
         {
-            Instantiate(m_bullet, m_charaterModelHolder.transform.TransformPoint(m_bulletSpawnPos), m_charaterModelHolder.transform.rotation);
+            Instantiate(m_bullet, m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), m_turretGunModel.transform.rotation);
             m_canFire = false;
             Invoke("EnableFiring", m_fireDelay);
         }
