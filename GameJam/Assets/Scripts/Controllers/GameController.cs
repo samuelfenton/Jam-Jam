@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
 		
 	}
 
+
     public void Trasmit(GameObject trasmitObject)
     {
         Camera.main.gameObject.GetComponent<PlayerCamera>().SetTrasmit(trasmitObject);

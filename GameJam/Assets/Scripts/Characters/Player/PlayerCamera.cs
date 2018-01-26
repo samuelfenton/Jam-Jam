@@ -60,7 +60,7 @@ public class PlayerCamera : MonoBehaviour
 
         m_intialPosition = transform.position;
         m_intialRotation = transform.rotation;
-        m_destinationPosition = m_destinationObject.transform.TransformPoint(m_destinationObject.GetComponent<PlayerRobot>().m_cameraOffset);
+        m_destinationPosition = m_destinationObject.GetComponent<PlayerRobot>().GetCameraPos();
         m_destinationRotation = m_destinationObject.transform.rotation;
     }
 
@@ -70,8 +70,8 @@ public class PlayerCamera : MonoBehaviour
         m_destinationObject.GetComponent<PlayerRobot>().enabled = true;
 
         //set up fixed position
-        gameObject.transform.parent = m_destinationObject.transform;
-        transform.localPosition = m_destinationObject.GetComponent<PlayerRobot>().m_cameraOffset;
+        gameObject.transform.parent = m_destinationObject.GetComponent<PlayerRobot>().GetCameraAnchor();
+        transform.localPosition = m_destinationPosition;
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
         m_cameraState = CAMERA_STATE.FIXED;

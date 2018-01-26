@@ -70,4 +70,14 @@ public class PlayerTurret : PlayerRobot
     {
         m_canFire = true;
     }
+
+    public override Vector3 GetCameraPos()
+    {
+        return m_turretGunModel.transform.TransformPoint(m_cameraOffset);
+    }
+
+    public override Transform GetCameraAnchor()
+    {
+        return m_turretGunModel.transform;
+    }
 }

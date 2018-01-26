@@ -7,7 +7,8 @@ public class PlayerRobot : BaseCharacter
     [SerializeField]
     private float m_trasmitRange = 2.0f;
 
-    public Vector3 m_cameraOffset = Vector3.zero;
+    [SerializeField]
+    protected Vector3 m_cameraOffset = Vector3.zero;
 
     // Update is called once per frame
     public override void Update ()
@@ -15,7 +16,7 @@ public class PlayerRobot : BaseCharacter
         base.Update();
         //Player jumping
 
-        if(Input.GetAxisRaw("Fire1") != 0.0f)
+        if(Input.GetAxisRaw("Fire2") != 0.0f)
         {
             GameObject trasmitObject = GetTransmitableObject();
             if (trasmitObject != null)
@@ -45,8 +46,22 @@ public class PlayerRobot : BaseCharacter
 
     private void Trasmit(GameObject jumpObject)
     {
+        jumpObject.tag = "Player";
         GameController.instance.Trasmit(jumpObject);
         GetComponent<BaseCharacter>().OnDeath();
         this.enabled = false;
     }
+
+    //Used to get camera spawning pos
+    public virtual Vector3 GetCameraPos()
+    {
+        return transform.TransformPoint(m_cameraOffset);
+    }
+
+    //Used to get camera parent anchor
+    public virtual Transform GetCameraAnchor()
+    {
+        return gameObject.transform;
+    }
+
 }
