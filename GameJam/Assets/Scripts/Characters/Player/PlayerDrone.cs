@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDrone : MonoBehaviour
+public class PlayerDrone : PlayerRobot
 {
     [SerializeField]
     private float m_forwardSpeed = 10.0f;
@@ -23,10 +23,13 @@ public class PlayerDrone : MonoBehaviour
     {
         m_rbCharacter = GetComponent<Rigidbody>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    public override void Update ()
     {
+        //Player trasmission abilities
+        base.Update();
+
         //Player controls
         float inputForwards = Input.GetAxisRaw("Vertical");
         float inputStrafe = Input.GetAxisRaw("Horizontal");

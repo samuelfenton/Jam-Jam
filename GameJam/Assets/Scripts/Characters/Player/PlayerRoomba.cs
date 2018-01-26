@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRoomba : BaseCharacter
+public class PlayerRoomba : PlayerRobot
 {
     [SerializeField]
     private float m_forwardSpeed = 10.0f;
@@ -18,10 +18,13 @@ public class PlayerRoomba : BaseCharacter
     {
         m_rbCharacter = GetComponent<Rigidbody>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    public override void Update ()
     {
+        //Player trasmission abilities
+        base.Update();
+
         //Player controls
         float inputForwards = Input.GetAxisRaw("Vertical");
         float inputStrafe = Input.GetAxisRaw("Horizontal");

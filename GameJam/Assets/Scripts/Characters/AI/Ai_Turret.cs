@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ai_Turret : MonoBehaviour {
-
-
-    public Transform gameobject;
-    public Transform Turret;
+public class Ai_Turret : AIRobot
+{
+    public Transform m_turret;
     public GameObject Player;
     public GameObject bullet;
     public float distance = 5;
@@ -17,16 +15,21 @@ public class Ai_Turret : MonoBehaviour {
     private float m_fireDelay = 1.0f;
     private bool m_canFire = true;
 
+    [SerializeField]
+    private Vector3 m_bulletSpawnPos = Vector3.zero;
+
+
     // Use this for initialization
     void Start ()
     {
 		
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    public override void Update()
     {
-        range = Vector3.Distance(gameobject.position, Turret.position);
+        base.Update();
+        range = Vector3.Distance(Player.transform.position, m_turret.position);
 
        //TODO can see player
         if (range < lookdistance)
@@ -41,15 +44,15 @@ public class Ai_Turret : MonoBehaviour {
 
     void look()
     {
-        GameObject.FindGameObjectWithTag("Player");
+        Player = GameObject.FindGameObjectWithTag("Player");
 
-        transform.LookAt(gameobject);
+        transform.LookAt(Player.transform);
     }
 
     void shoot()
     {
 
-        Instantiate<GameObject>(bullet, transform.position, transform.rotation);
+        Instantiate(bullet, transform.TransformPoint(m_bulletSpawnPos), transform.rotation);
 
         //need make timer for bullets and rotaion speed
         //make ray cast so dont shoot threq walls

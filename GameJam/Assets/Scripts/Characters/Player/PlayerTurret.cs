@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTurret : BaseCharacter
+public class PlayerTurret : PlayerRobot
 {
     [SerializeField]
     private float m_rotationSpeed = 3.0f;
@@ -21,16 +21,12 @@ public class PlayerTurret : BaseCharacter
     private GameObject m_bullet = null;
 
     private bool m_canFire = true;
-
-    // Use this for initialization
-    void Start ()
-    {
-		
-	}
 	
 	// Update is called once per frame
-	void Update ()
+	public override void Update ()
     {
+        //Player trasmission abilities
+        base.Update();
 
         //Rotation TurretGun
         float inputMouseX = Input.GetAxis("Mouse X");

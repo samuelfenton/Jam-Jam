@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ai_roomba : MonoBehaviour {
-
+public class Ai_roomba : AIRobot
+{
     public GameObject[] nodes;
     int nodesnum = 0;
     public float distance = 2;
@@ -14,10 +14,11 @@ public class Ai_roomba : MonoBehaviour {
     {
         nextnode();
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    public override void Update()
     {
+        base.Update();
         range = Vector3.Distance(nodes[nodesnum].transform.position, transform.position);
         if(range > distance)
         {
