@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
 {
-    [SerializeField]
-    private float m_health = 2;
+    
+    public float m_health = 2;
+    public float m_timer = 30;
 
     [SerializeField]
     private GameObject m_deathEffect = null;
@@ -13,8 +14,13 @@ public class BaseCharacter : MonoBehaviour
     // Update is called once per frame
     public virtual void Update ()
     {
+        m_timer += Time.deltaTime;
+
         if (m_health < 0.0f)
-            OnDeath(); 
+            OnDeath();
+
+        if (m_timer< 0.0f)
+            OnDeath();
     }
 
     public void TakeDamage(float damage)
