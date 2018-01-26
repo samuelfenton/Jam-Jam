@@ -8,8 +8,10 @@ public class PlayerCamera : MonoBehaviour
     private CAMERA_STATE m_cameraState = CAMERA_STATE.FIXED;
 
     private GameObject m_destinationObject = null;
-    private Transform m_intialTransform = null;
-    private Transform m_destinationTransform = null;
+    private Vector3 m_intialPosition = Vector3.zero;
+    private Quaternion m_intialRotation = Quaternion.identity;
+    private Vector3 m_destinationPosition = Vector3.zero;
+    private Quaternion m_destinationRotation = Quaternion.identity;
 
     [SerializeField]
     private float m_transmittingTime = 0.0f;
@@ -33,12 +35,12 @@ public class PlayerCamera : MonoBehaviour
                 //lerp from initial to destination transform
                 m_transmittingTimer += Time.deltaTime;
 
-                if (m_transmittingTimer <= m_transmittingTime)
+                if (m_transmittingTimer >= m_transmittingTime)
                     TransmitArrival();
                 else
                 {
-                    transform.position = Vector3.Lerp(m_intialTransform.position, m_destinationTransform.position, m_transmittingTimer / m_transmittingTime);
-                    transform.rotation = Quaternion.Lerp(m_intialTransform.rotation, m_destinationTransform.rotation, m_transmittingTimer / m_transmittingTime);
+                    transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
+                    transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
                 }
                 break;
         }
@@ -46,16 +48,20 @@ public class PlayerCamera : MonoBehaviour
 
     public void SetTrasmit(GameObject destinationObject)
     {
+        transform.parent = null;
+
         m_destinationObject = destinationObject;
 
-        m_intialTransform = transform;
+        if (m_destinationObject.GetComponent<AIRobot>() != null)
+            m_destinationObject.GetComponent<AIRobot>().enabled = false;
 
-        m_destinationTransform.position = m_destinationObject.transform.TransformPoint(m_destinationObject.GetComponent<PlayerRobot>().m_cameraOffset);
-        m_destinationTransform.rotation = m_destinationObject.transform.rotation;
-
-        m_destinationObject.GetComponent<AIRobot>().enabled = false;
         m_transmittingTimer = 0.0f;
         m_cameraState = CAMERA_STATE.TRANSMITTING;
+
+        m_intialPosition = transform.position;
+        m_intialRotation = transform.rotation;
+        m_destinationPosition = m_destinationObject.transform.TransformPoint(m_destinationObject.GetComponent<PlayerRobot>().m_cameraOffset);
+        m_destinationRotation = m_destinationObject.transform.rotation;
     }
 
     private void TransmitArrival()
@@ -66,7 +72,7 @@ public class PlayerCamera : MonoBehaviour
         //set up fixed position
         gameObject.transform.parent = m_destinationObject.transform;
         transform.localPosition = m_destinationObject.GetComponent<PlayerRobot>().m_cameraOffset;
-        m_destinationTransform.rotation = Quaternion.Euler(Vector3.zero);
+        transform.rotation = Quaternion.Euler(Vector3.zero);
 
         m_cameraState = CAMERA_STATE.FIXED;
     }

@@ -29,23 +29,27 @@ public class Ai_Turret : AIRobot
     public override void Update()
     {
         base.Update();
-        range = Vector3.Distance(Player.transform.position, m_turret.position);
 
-       //TODO can see player
-        if (range < lookdistance)
-        {   
-            look();
-            if(range < distance && m_canFire)
-            {
-                shoot();
+        Player = GameObject.FindGameObjectWithTag("Player");
+
+        if(Player != null)
+        {
+            range = Vector3.Distance(Player.transform.position, m_turret.position);
+
+           //TODO can see player
+            if (range < lookdistance)
+            {   
+                look();
+                if(range < distance && m_canFire)
+                {
+                    shoot();
+                }
             }
         }
 	}
 
     void look()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-
         transform.LookAt(Player.transform);
     }
 

@@ -26,6 +26,6 @@ public class BaseCharacter : MonoBehaviour
     {
         if (m_deathEffect != null)
             Destroy(Instantiate(m_deathEffect, transform.position, Quaternion.identity), 5.0f);
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 }

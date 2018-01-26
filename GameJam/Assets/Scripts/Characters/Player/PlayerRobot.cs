@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerRobot : BaseCharacter
 {
+    [SerializeField]
     private float m_trasmitRange = 2.0f;
-    private GameObject m_trasmitObject = null;
 
     public Vector3 m_cameraOffset = Vector3.zero;
 
@@ -20,7 +20,6 @@ public class PlayerRobot : BaseCharacter
             GameObject trasmitObject = GetTransmitableObject();
             if (trasmitObject != null)
                 Trasmit(trasmitObject);
-            Debug.Log(trasmitObject);
         }
 	}
 
@@ -46,8 +45,8 @@ public class PlayerRobot : BaseCharacter
 
     private void Trasmit(GameObject jumpObject)
     {
-        gameObject.tag = "Enemy";
         GameController.instance.Trasmit(jumpObject);
         GetComponent<BaseCharacter>().OnDeath();
+        this.enabled = false;
     }
 }

@@ -7,8 +7,6 @@ public class GameController : MonoBehaviour
 
     public static GameController instance = null;
 
-    [SerializeField]
-    private GameObject m_mainCamera = null;
     // Use this for initialization
     void Awake ()
     {
@@ -17,8 +15,6 @@ public class GameController : MonoBehaviour
 
         else if (instance != this)
             Destroy(gameObject);
-
-        m_mainCamera = Camera.main.gameObject;
     }
 	
 	// Update is called once per frame
@@ -29,7 +25,7 @@ public class GameController : MonoBehaviour
 
     public void Trasmit(GameObject trasmitObject)
     {
-        m_mainCamera.GetComponent<PlayerCamera>().SetTrasmit(trasmitObject);
+        Camera.main.gameObject.GetComponent<PlayerCamera>().SetTrasmit(trasmitObject);
     }
 
 }
