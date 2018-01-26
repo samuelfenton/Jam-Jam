@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Ai_Turret : AIRobot
 {
-    public Transform m_turret;
-    public GameObject m_Player;
+    private GameObject m_Player;
     public GameObject m_Bullet;
     public float m_Distance = 5;
-    public float lookdistance = 10;
-    float range;
+    public float m_lookDistance = 10;
+    private float m_range = 0;
 
     [SerializeField]
     private float m_fireDelay = 1.0f;
@@ -17,6 +16,17 @@ public class Ai_Turret : AIRobot
 
     [SerializeField]
     private Vector3 m_bulletSpawnPos = Vector3.zero;
+
+    [SerializeField]
+    private float m_rotationSpeed = 3.0f;
+
+    [SerializeField]
+    private float m_clampPitchAngle = 75.0f;
+
+    [SerializeField]
+    private GameObject m_turretBaseModel = null;
+    [SerializeField]
+    private GameObject m_turretGunModel = null;
 
 
     // Use this for initialization
@@ -34,26 +44,65 @@ public class Ai_Turret : AIRobot
 
         if(m_Player != null)
         {
-            range = Vector3.Distance(m_Player.transform.position, m_turret.position);
+            m_range = Vector3.Distance(m_Player.transform.position, transform.position);
 
            //TODO can see player
-            if (range < lookdistance)
-            {   
-                look();
-                if(range < m_Distance && m_canFire)
+            if (m_range < m_lookDistance)
+            {
+                Look();
+                if(m_range < m_Distance && m_canFire)
                 {
-                    shoot();
+                    Shoot();
                 }
             }
         }
 	}
 
-    void look()
+    void Look()
     {
-        transform.LookAt(m_Player.transform);
+        Vector3 lookGunDir = m_Player.transform.position - m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos);
+        lookGunDir.Normalize();
+        Vector3 currentGunDir = m_turretGunModel.transform.localEulerAngles;
+        currentGunDir.Normalize();
+
+        float aimX = lookGunDir.x - currentGunDir.x;
+        float aimY = lookGunDir.y - currentGunDir.y;
+
+        Debug.Log("Planned Look: " + lookGunDir);
+        Debug.Log("current Look: " + currentGunDir);
+        Debug.Log("YAmount: " + aimY);
+        
+        //Update pitch
+        Vector3 localEulerGun = m_turretGunModel.transform.localEulerAngles;
+
+        //Pitch
+        //if (aimY < 0.0f)
+        //    aimY = -1.0f;
+        //else
+        //    aimY = 1.0f;
+        localEulerGun.x -= aimY * m_rotationSpeed;
+        localEulerGun.y = 0.0f;
+        localEulerGun.z = 0.0f;
+        //Clamp pitch
+        //if (localEulerGun.x > m_clampPitchAngle && localEulerGun.x < 180)
+        //    localEulerGun.x = m_clampPitchAngle;
+
+        //if (localEulerGun.x < 360 - m_clampPitchAngle && localEulerGun.x > 180)
+        //    localEulerGun.x = -m_clampPitchAngle;
+
+        m_turretGunModel.transform.localEulerAngles = localEulerGun;
+
+        //Yaw
+        //Update Yaw
+        //Vector3 localEulerBase = m_turretBaseModel.transform.localEulerAngles;
+
+        //localEulerBase.y += aimX * m_rotationSpeed;
+        //localEulerBase.z = 0.0f;
+
+        //m_turretBaseModel.transform.localEulerAngles = localEulerBase;
     }
 
-    void shoot()
+    void Shoot()
     {
 
         Instantiate(m_Bullet, transform.TransformPoint(m_bulletSpawnPos), transform.rotation);
