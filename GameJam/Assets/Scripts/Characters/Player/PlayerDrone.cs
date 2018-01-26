@@ -30,11 +30,12 @@ public class PlayerDrone : MonoBehaviour
         //Player controls
         float inputForwards = Input.GetAxisRaw("Vertical");
         float inputStrafe = Input.GetAxisRaw("Horizontal");
-        float inputRotation = Input.GetAxisRaw("Mouse X");
+        float inputRotation = Input.GetAxis("Mouse X");
 
         m_rbCharacter.velocity = transform.forward * inputForwards * m_forwardSpeed + transform.right * inputStrafe * m_strafeSpeed;
 
         transform.Rotate(Vector3.up * Time.deltaTime * inputRotation * m_rotationSpeed);
-        m_charaterModelHolder.transform.rotation = Quaternion.Euler(inputForwards * m_leanAmount, 0.0f, -inputStrafe * m_leanAmount);
+
+        m_charaterModelHolder.transform.localRotation = Quaternion.Euler(inputForwards * m_leanAmount, 0.0f, -inputStrafe * m_leanAmount);
     }
 }

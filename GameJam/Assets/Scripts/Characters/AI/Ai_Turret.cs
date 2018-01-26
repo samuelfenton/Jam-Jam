@@ -12,8 +12,10 @@ public class Ai_Turret : MonoBehaviour {
     public float distance = 5;
     public float lookdistance = 10;
     float range;
-    
 
+    [SerializeField]
+    private float m_fireDelay = 1.0f;
+    private bool m_canFire = true;
 
     // Use this for initialization
     void Start ()
@@ -26,11 +28,11 @@ public class Ai_Turret : MonoBehaviour {
     {
         range = Vector3.Distance(gameobject.position, Turret.position);
 
-       
+       //TODO can see player
         if (range < lookdistance)
         {   
             look();
-            if(range < distance)
+            if(range < distance && m_canFire)
             {
                 shoot();
             }
@@ -43,14 +45,24 @@ public class Ai_Turret : MonoBehaviour {
 
         transform.LookAt(gameobject);
     }
+
     void shoot()
     {
 
         Instantiate<GameObject>(bullet, transform.position, transform.rotation);
-        
+
         //need make timer for bullets and rotaion speed
         //make ray cast so dont shoot threq walls
+
+        m_canFire = false;
+        Invoke("EnableFiring", m_fireDelay);
     }
 
-  
+
+    private void EnableFiring()
+    {
+        m_canFire = true;
+    }
+
+
 }

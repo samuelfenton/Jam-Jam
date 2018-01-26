@@ -25,7 +25,7 @@ public class PlayerRoomba : BaseCharacter
         //Player controls
         float inputForwards = Input.GetAxisRaw("Vertical");
         float inputStrafe = Input.GetAxisRaw("Horizontal");
-        float inputRotation = Input.GetAxisRaw("Mouse X");
+        float inputRotation = Input.GetAxis("Mouse X");
 
         m_rbCharacter.velocity = transform.forward * inputForwards * m_forwardSpeed + transform.right * inputStrafe * m_strafeSpeed;
 
