@@ -5,22 +5,33 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
-    public Slider m_Health;
 
-    public Text m_Timer;
+    [SerializeField]
+    private Slider m_Health;
+    private Text m_Timer;
+    private Image m_Hack;
+    private Image m_Threat;
+    private Image m_Search;
+    private Image m_Identified;
 
-    public GameObject m_Hack;
-    public GameObject m_Threat;
-    public GameObject m_Search;
-    public GameObject m_Identified;
+    [SerializeField]
+    private float m_FirstThreat;
+    private float m_SecondThreat;
+    private float m_FirstSearch;
+    private float m_secondSearch;
+    private float m_IdentifiedTimer;
+
 
     BaseCharacter Player;
 
     // Use this for initialization
     void Start ()
     {
-		
-	}
+        m_Hack.enabled = false;
+        m_Threat.enabled = false;
+        m_Search.enabled = false;
+        m_Identified.enabled = false;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -28,5 +39,22 @@ public class UI : MonoBehaviour
         m_Health.value = Player.m_health;
 
         m_Timer.text = "" + Player.m_timer;
-	}
+
+
+        if(Player.m_timer < m_FirstThreat && Player.m_timer > m_SecondThreat)
+        {
+            m_Threat.enabled = true;
+        }
+
+        if (Player.m_timer < m_FirstSearch && Player.m_timer > m_secondSearch)
+        {
+            m_Search.enabled = true;
+        }
+
+        if (Player.m_timer < m_IdentifiedTimer && Player.m_timer > 1)
+        {
+            m_Identified.enabled = true;
+        }
+
+    }
 }

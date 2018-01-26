@@ -5,9 +5,9 @@ using UnityEngine;
 public class Ai_Turret : AIRobot
 {
     public Transform m_turret;
-    public GameObject Player;
-    public GameObject bullet;
-    public float distance = 5;
+    public GameObject m_Player;
+    public GameObject m_Bullet;
+    public float m_Distance = 5;
     public float lookdistance = 10;
     float range;
 
@@ -30,17 +30,17 @@ public class Ai_Turret : AIRobot
     {
         base.Update();
 
-        Player = GameObject.FindGameObjectWithTag("Player");
+        m_Player = GameObject.FindGameObjectWithTag("Player");
 
-        if(Player != null)
+        if(m_Player != null)
         {
-            range = Vector3.Distance(Player.transform.position, m_turret.position);
+            range = Vector3.Distance(m_Player.transform.position, m_turret.position);
 
            //TODO can see player
             if (range < lookdistance)
             {   
                 look();
-                if(range < distance && m_canFire)
+                if(range < m_Distance && m_canFire)
                 {
                     shoot();
                 }
@@ -50,13 +50,13 @@ public class Ai_Turret : AIRobot
 
     void look()
     {
-        transform.LookAt(Player.transform);
+        transform.LookAt(m_Player.transform);
     }
 
     void shoot()
     {
 
-        Instantiate(bullet, transform.TransformPoint(m_bulletSpawnPos), transform.rotation);
+        Instantiate(m_Bullet, transform.TransformPoint(m_bulletSpawnPos), transform.rotation);
 
         //need make timer for bullets and rotaion speed
         //make ray cast so dont shoot threq walls
