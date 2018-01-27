@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerTurret : PlayerRobot
 {
+    private Animator m_animator = null;
+
     [SerializeField]
     private float m_rotationSpeed = 3.0f;
 
@@ -24,9 +26,23 @@ public class PlayerTurret : PlayerRobot
 
     private bool m_canFire = true;
 	
+    private void Start()
+    {
+        m_animator = GetComponent<Animator>();
+    }
+
 	// Update is called once per frame
 	public override void Update ()
     {
+        //Disbale animator on idle
+        if(m_animator.enabled)
+        {
+            if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                m_animator.enabled = false;
+            }
+        }
+
         //Player trasmission abilities
         base.Update();
 
@@ -39,6 +55,7 @@ public class PlayerTurret : PlayerRobot
 
         //Pitch
         localEulerGun.x -= inputMouseY * m_rotationSpeed;
+        localEulerGun.z = 0.0f;
 
         //Clamp pitch
         if (localEulerGun.x > m_clampPitchAngle && localEulerGun.x <180)
@@ -63,17 +80,14 @@ public class PlayerTurret : PlayerRobot
             Instantiate(m_bullet, m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), m_turretGunModel.transform.rotation);
             m_canFire = false;
             Invoke("EnableFiring", m_fireDelay);
+            m_animator.enabled = true;
+            m_animator.SetTrigger("FireGun");
         }
     }
 
     private void EnableFiring()
     {
         m_canFire = true;
-    }
-
-    public override Vector3 GetCameraPos()
-    {
-        return m_turretGunModel.transform.TransformPoint(m_cameraOffset);
     }
 
     public override Transform GetCameraAnchor()

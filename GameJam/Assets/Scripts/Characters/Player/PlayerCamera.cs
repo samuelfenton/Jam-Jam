@@ -17,6 +17,9 @@ public class PlayerCamera : MonoBehaviour
     private float m_transmittingTime = 0.0f;
     private float m_transmittingTimer = 0.0f;
 
+    [SerializeField]
+    private Vector3 m_cameraRotationOffset = new Vector3(16.0f, 0.0f, 0.0f);
+
     // Use this for initialization
     void Start ()
     {
@@ -41,6 +44,7 @@ public class PlayerCamera : MonoBehaviour
                 {
                     transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
                     transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
+                    TransmitColour(m_transmittingTimer/ m_transmittingTime);
                 }
                 break;
         }
@@ -52,6 +56,10 @@ public class PlayerCamera : MonoBehaviour
 
         m_destinationObject = destinationObject;
 
+        Rigidbody rbDestination = m_destinationObject.GetComponent<Rigidbody>();
+        if(rbDestination!=null)
+            m_destinationObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
         if (m_destinationObject.GetComponent<AIRobot>() != null)
             m_destinationObject.GetComponent<AIRobot>().enabled = false;
 
@@ -60,8 +68,10 @@ public class PlayerCamera : MonoBehaviour
 
         m_intialPosition = transform.position;
         m_intialRotation = transform.rotation;
-        m_destinationPosition = m_destinationObject.GetComponent<PlayerRobot>().GetCameraPos();
-        m_destinationRotation = m_destinationObject.transform.rotation;
+
+        m_destinationPosition = m_destinationObject.GetComponent<PlayerRobot>().GetCameraAnchor().TransformPoint(m_destinationObject.GetComponent<PlayerRobot>().GetCameraPos());
+
+        m_destinationRotation = m_destinationObject.transform.rotation * Quaternion.Euler(m_cameraRotationOffset);
     }
 
     private void TransmitArrival()
@@ -70,10 +80,20 @@ public class PlayerCamera : MonoBehaviour
         m_destinationObject.GetComponent<PlayerRobot>().enabled = true;
 
         //set up fixed position
-        gameObject.transform.parent = m_destinationObject.GetComponent<PlayerRobot>().GetCameraAnchor();
-        transform.localPosition = m_destinationPosition;
-        transform.rotation = Quaternion.Euler(Vector3.zero);
+        transform.parent = m_destinationObject.GetComponent<PlayerRobot>().GetCameraAnchor();
+        transform.localPosition = m_destinationObject.GetComponent<PlayerRobot>().GetCameraPos() ;
+        transform.localRotation = Quaternion.Euler(16.0f, 0.0f, 0.0f);
 
         m_cameraState = CAMERA_STATE.FIXED;
+    }
+
+    private void TransmitColour(float colourPercent)
+    {
+        Renderer[] childRenderers = m_destinationObject.GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer renderer in childRenderers)
+        {
+            renderer.material.SetFloat("_Emmisivechange", 10 - (20 * colourPercent));
+        }
     }
 }

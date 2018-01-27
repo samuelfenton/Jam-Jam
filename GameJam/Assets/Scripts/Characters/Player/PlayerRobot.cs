@@ -55,7 +55,7 @@ public class PlayerRobot : BaseCharacter
     //Used to get camera spawning pos
     public virtual Vector3 GetCameraPos()
     {
-        return transform.TransformPoint(m_cameraOffset);
+        return m_cameraOffset;
     }
 
     //Used to get camera parent anchor

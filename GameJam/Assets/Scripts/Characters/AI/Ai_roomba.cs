@@ -4,42 +4,51 @@ using UnityEngine;
 
 public class Ai_roomba : AIRobot
 {
-    public GameObject[] m_Nodes;
-    int m_NodesNumber = 0;
-    public float m_Distance = 2;
-    float m_Range;
+    public GameObject[] m_nodes;
+    int m_nodeIndex = 0;
 
+    [SerializeField]
+    private float m_closingDistance = 2;
+
+    [SerializeField]
+    private float m_forwardSpeed = 2;
+
+    private Rigidbody m_rbCharacter = null;
 	// Use this for initialization
 	void Start ()
     {
-        nextnode();
-	}
+        m_rbCharacter = GetComponent<Rigidbody>();
+    }
 
     // Update is called once per frame
     public override void Update()
     {
         base.Update();
-        m_Range = Vector3.Distance(m_Nodes[m_NodesNumber].transform.position, transform.position);
-        if(m_Range > m_Distance)
-        {
-            followNodes();
-
-        }
+        if (Vector3.Distance(m_nodes[m_nodeIndex].transform.position, transform.position) < m_closingDistance)
+            NextNode();
+        else
+            GoToNode();
     }
-    void followNodes()
+    void GoToNode()
     {
-        gameObject.transform.position = (m_Nodes[m_NodesNumber].transform.position  - gameObject.transform.position) * Time.deltaTime;
-        nextnode();
+        Vector3 movementDir = (m_nodes[m_nodeIndex].transform.position - gameObject.transform.position).normalized;
+        m_rbCharacter.velocity = movementDir * m_forwardSpeed;
     }
 
-    void nextnode()
+    void NextNode()
     {
-        if (m_Nodes.Length == 0)
+        if (m_nodeIndex == m_nodes.Length -1) //End of nodes
         {
-            return;
+            m_nodeIndex = 0;
+            transform.position = m_nodes[0].transform.position;
+        }
+        else
+        {
+            m_nodeIndex++;
         }
 
-        if(m_Range == 0)
-        m_NodesNumber = (m_NodesNumber + 1) % m_Nodes.Length;
+        //Rotate to face next node
+        transform.LookAt(m_nodes[m_nodeIndex].transform.position);
+
     }
 }

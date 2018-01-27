@@ -60,37 +60,9 @@ public class Ai_Turret : AIRobot
 
     void Look()
     {
-        Vector3 lookGunDir = m_Player.transform.position - m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos);
-        lookGunDir.Normalize();
-        Vector3 currentGunDir = m_turretGunModel.transform.localEulerAngles;
-        currentGunDir.Normalize();
+        //Vector3 lookGunDir = m_Player.transform.position - m_turretGunModel.transform.position;
 
-        float aimX = lookGunDir.x - currentGunDir.x;
-        float aimY = lookGunDir.y - currentGunDir.y;
-
-        Debug.Log("Planned Look: " + lookGunDir);
-        Debug.Log("current Look: " + currentGunDir);
-        Debug.Log("YAmount: " + aimY);
-        
-        //Update pitch
-        Vector3 localEulerGun = m_turretGunModel.transform.localEulerAngles;
-
-        //Pitch
-        //if (aimY < 0.0f)
-        //    aimY = -1.0f;
-        //else
-        //    aimY = 1.0f;
-        localEulerGun.x -= aimY * m_rotationSpeed;
-        localEulerGun.y = 0.0f;
-        localEulerGun.z = 0.0f;
-        //Clamp pitch
-        //if (localEulerGun.x > m_clampPitchAngle && localEulerGun.x < 180)
-        //    localEulerGun.x = m_clampPitchAngle;
-
-        //if (localEulerGun.x < 360 - m_clampPitchAngle && localEulerGun.x > 180)
-        //    localEulerGun.x = -m_clampPitchAngle;
-
-        m_turretGunModel.transform.localEulerAngles = localEulerGun;
+        //m_turretBaseModel.transform.LookAt(m_Player.transform);
 
         //Yaw
         //Update Yaw

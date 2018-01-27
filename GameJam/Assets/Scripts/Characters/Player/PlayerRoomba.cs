@@ -11,6 +11,11 @@ public class PlayerRoomba : PlayerRobot
     [SerializeField]
     private float m_rotationSpeed = 3.0f;
 
+    [SerializeField]
+    private GameObject m_leftWheel = null;
+    [SerializeField]
+    private GameObject m_rightWheel = null;
+
     private Rigidbody m_rbCharacter = null;
 
     // Use this for initialization
@@ -27,10 +32,9 @@ public class PlayerRoomba : PlayerRobot
 
         //Player controls
         float inputForwards = Input.GetAxisRaw("Vertical");
-        float inputStrafe = Input.GetAxisRaw("Horizontal");
         float inputRotation = Input.GetAxis("Mouse X");
 
-        m_rbCharacter.velocity = transform.forward * inputForwards * m_forwardSpeed + transform.right * inputStrafe * m_strafeSpeed;
+        m_rbCharacter.velocity = transform.forward * inputForwards * m_forwardSpeed;
 
         transform.Rotate(Vector3.up * Time.deltaTime * inputRotation * m_rotationSpeed);
     }
