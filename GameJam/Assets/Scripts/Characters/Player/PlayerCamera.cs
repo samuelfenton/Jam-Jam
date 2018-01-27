@@ -93,7 +93,7 @@ public class PlayerCamera : MonoBehaviour
 
         foreach (Renderer renderer in childRenderers)
         {
-            renderer.material.SetFloat("_Emmisivechange", 10 - (20 * colourPercent));
+            renderer.material.SetFloat("_Emmisivechange", 1 - (2 * colourPercent));
         }
     }
 }

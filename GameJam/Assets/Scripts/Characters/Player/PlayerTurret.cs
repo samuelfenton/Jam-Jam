@@ -80,8 +80,8 @@ public class PlayerTurret : PlayerRobot
             Instantiate(m_bullet, m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), m_turretGunModel.transform.rotation);
             m_canFire = false;
             Invoke("EnableFiring", m_fireDelay);
-            m_animator.enabled = true;
-            m_animator.SetTrigger("FireGun");
+            //m_animator.enabled = true;
+            //m_animator.SetTrigger("FireGun");
         }
     }
 
