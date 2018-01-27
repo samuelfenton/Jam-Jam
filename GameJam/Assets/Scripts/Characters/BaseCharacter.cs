@@ -18,8 +18,8 @@ public class BaseCharacter : MonoBehaviour
         if (m_health < 0.0f)
             OnDeath();
 
-        if (m_timer > 30.0f)
-            OnDeath();
+        //if (m_timer > 30.0f)
+        //    OnDeath();
     }
 
     public void TakeDamage(float damage)
