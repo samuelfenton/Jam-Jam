@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerDrone : PlayerRobot
 {
+    private Animator m_animator = null;
+
     [SerializeField]
     private float m_forwardSpeed = 10.0f;
     [SerializeField]
@@ -22,6 +24,9 @@ public class PlayerDrone : PlayerRobot
     void Start ()
     {
         m_rbCharacter = GetComponent<Rigidbody>();
+
+        m_animator = GetComponent<Animator>();
+        m_animator.speed = 0;
     }
 
     // Update is called once per frame
@@ -40,5 +45,10 @@ public class PlayerDrone : PlayerRobot
         transform.Rotate(Vector3.up * Time.deltaTime * inputRotation * m_rotationSpeed);
 
         m_charaterModelHolder.transform.localRotation = Quaternion.Euler(inputForwards * m_leanAmount, 0.0f, -inputStrafe * m_leanAmount);
+    }
+
+    private void HackDrone()
+    {
+        m_animator.speed = 1;
     }
 }
