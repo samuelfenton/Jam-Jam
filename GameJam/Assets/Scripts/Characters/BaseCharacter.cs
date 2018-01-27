@@ -5,7 +5,7 @@ using UnityEngine;
 public class BaseCharacter : MonoBehaviour
 {
     public float m_health = 2;
-    public float m_timer = 30;
+    public float m_timer = 0;
 
     [SerializeField]
     private GameObject m_deathEffect = null;
@@ -18,7 +18,7 @@ public class BaseCharacter : MonoBehaviour
         if (m_health < 0.0f)
             OnDeath();
 
-        if (m_timer< 0.0f)
+        if (m_timer > 30.0f)
             OnDeath();
     }
 

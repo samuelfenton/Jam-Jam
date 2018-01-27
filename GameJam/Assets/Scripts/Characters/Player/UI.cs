@@ -8,19 +8,28 @@ public class UI : MonoBehaviour
 
     [SerializeField]
     private Slider m_Health;
-    private Text m_Timer;
+    [SerializeField]
+    private Slider m_Timer;
+    [SerializeField]
     private Image m_Hack;
+    [SerializeField]
     private Image m_Threat;
+    [SerializeField]
     private Image m_Search;
+     [SerializeField]
     private Image m_Identified;
 
 
     //the times between alerts anti-virus happen 
     [SerializeField]
     private float m_FirstThreat;
+    [SerializeField]
     private float m_SecondThreat;
+    [SerializeField]
     private float m_FirstSearch;
+    [SerializeField]
     private float m_secondSearch;
+    [SerializeField]
     private float m_IdentifiedTimer;
 
 
@@ -40,23 +49,11 @@ public class UI : MonoBehaviour
     {
         m_Health.value = Player.m_health;
 
-        m_Timer.text = "" + Player.m_timer;
+        m_Timer.value = Player.m_timer;
 
+        m_Timer.maxValue = 30;
 
-        if(Player.m_timer < m_FirstThreat && Player.m_timer > m_SecondThreat)
-        {
-            m_Threat.enabled = true;
-        }
-
-        if (Player.m_timer < m_FirstSearch && Player.m_timer > m_secondSearch)
-        {
-            m_Search.enabled = true;
-        }
-
-        if (Player.m_timer < m_IdentifiedTimer && Player.m_timer > 1)
-        {
-            m_Identified.enabled = true;
-        }
+       
 
     }
 }
