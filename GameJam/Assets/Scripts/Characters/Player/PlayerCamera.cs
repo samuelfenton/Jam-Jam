@@ -83,6 +83,14 @@ public class PlayerCamera : MonoBehaviour
             transmitEffect.transform.LookAt(m_destinationObject.transform.position);
             Destroy(transmitEffect, 5.0f);
         }
+
+        //Drone Specfic code
+        PlayerDrone droneObject = m_destinationObject.GetComponent<PlayerDrone>();
+        if (droneObject != null)
+        {
+            droneObject.HackDrone();
+            m_destinationPosition += m_destinationObject.transform.forward * 4.0f; 
+        }
     }
 
     private void TransmitArrival()

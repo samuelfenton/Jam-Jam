@@ -48,7 +48,7 @@ public class PlayerRobot : BaseCharacter
     {
         jumpObject.tag = "Player";
         GameManager.instance.Trasmit(jumpObject);
-        GetComponent<BaseCharacter>().OnDeath();
+        OnDeath();
         this.enabled = false;
     }
 

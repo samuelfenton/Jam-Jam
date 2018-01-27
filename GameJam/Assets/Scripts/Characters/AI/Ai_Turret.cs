@@ -31,7 +31,7 @@ public class Ai_Turret : AIRobot
     [SerializeField]
     private GameObject m_turretGunModel = null;
     [SerializeField]
-    private AudioSource m_audio;
+    //private AudioSource m_audio;
 
 
     private void Start()
@@ -51,12 +51,12 @@ public class Ai_Turret : AIRobot
         {
             if (CanSeePlayer())
                 m_animator.speed = 1;
-            m_audio.Play();
+           // m_audio.Play();
             if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 m_animator.enabled = false;
                 m_wakeupSequence = false;
-                m_audio.Stop();
+               // m_audio.Stop();
             }
         }
         else

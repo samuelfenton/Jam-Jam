@@ -6,8 +6,9 @@ public class Door : BaseCharacter
 
 {
     [SerializeField]
-    GameObject m_Explosion;
-    GameObject m_BrokenDoor;
+    private GameObject m_Explosion;
+
+    public GameObject m_BrokenDoor;
 
 	// Use this for initialization
 	void Start ()
@@ -25,10 +26,9 @@ public class Door : BaseCharacter
     {
         base.OnDeath();
 
-        Instantiate(m_Explosion, transform.position, Quaternion.identity);
+        Destroy(Instantiate(m_Explosion, transform.position, Quaternion.identity),5.0f);
+        m_BrokenDoor.SetActive(true);
 
         Destroy(gameObject);
-
-        m_BrokenDoor.SetActive(true);
     }
 }
