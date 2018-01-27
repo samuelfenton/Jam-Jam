@@ -14,10 +14,12 @@ public class Ai_roomba : AIRobot
     private float m_forwardSpeed = 2;
 
     private Rigidbody m_rbCharacter = null;
+
 	// Use this for initialization
 	void Start ()
     {
         m_rbCharacter = GetComponent<Rigidbody>();
+        NextNode();
     }
 
     // Update is called once per frame
@@ -31,8 +33,9 @@ public class Ai_roomba : AIRobot
     }
     void GoToNode()
     {
-        Vector3 movementDir = (m_nodes[m_nodeIndex].transform.position - gameObject.transform.position).normalized;
-        m_rbCharacter.velocity = movementDir * m_forwardSpeed;
+        Vector3 movementDir = m_nodes[m_nodeIndex].transform.position - gameObject.transform.position;
+        movementDir.z = 0.0f;
+        m_rbCharacter.velocity = movementDir.normalized * m_forwardSpeed;
     }
 
     void NextNode()

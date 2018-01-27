@@ -14,6 +14,9 @@ public class PlayerCamera : MonoBehaviour
     private Quaternion m_destinationRotation = Quaternion.identity;
 
     [SerializeField]
+    private GameObject m_transmitEffect = null;
+
+    [SerializeField]
     private float m_transmittingTime = 0.0f;
     private float m_transmittingTimer = 0.0f;
 
@@ -72,6 +75,14 @@ public class PlayerCamera : MonoBehaviour
         m_destinationPosition = m_destinationObject.GetComponent<PlayerRobot>().GetCameraAnchor().TransformPoint(m_destinationObject.GetComponent<PlayerRobot>().GetCameraPos());
 
         m_destinationRotation = m_destinationObject.transform.rotation * Quaternion.Euler(m_cameraRotationOffset);
+
+        if (m_transmitEffect != null)
+        {
+            GameObject transmitEffect = Instantiate(m_transmitEffect, transform.position, Quaternion.identity);
+            transmitEffect.GetComponent<ParticleSystem>().startLifetime = Vector3.Distance(m_destinationObject.transform.position, transform.position) / 3;
+            transmitEffect.transform.LookAt(m_destinationObject.transform.position);
+            Destroy(transmitEffect, 5.0f);
+        }
     }
 
     private void TransmitArrival()
@@ -93,7 +104,7 @@ public class PlayerCamera : MonoBehaviour
 
         foreach (Renderer renderer in childRenderers)
         {
-            renderer.material.SetFloat("_Emmisivechange", 1 - (2 * colourPercent));
+            renderer.material.SetFloat("_Emmisivechange", 1 - ( 2 * colourPercent));
         }
     }
 }

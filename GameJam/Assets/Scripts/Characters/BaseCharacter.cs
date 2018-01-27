@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
 {
-    
     public float m_health = 2;
     public float m_timer = 30;
 

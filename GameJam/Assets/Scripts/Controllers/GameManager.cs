@@ -14,13 +14,16 @@ public class GameManager : MonoBehaviour
 
         else if (instance != this)
             Destroy(gameObject);
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		
-	}
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Cursor.lockState = CursorLockMode.None;
+    }
 
 
     public void Trasmit(GameObject trasmitObject)

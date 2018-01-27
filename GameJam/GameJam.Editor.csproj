@@ -239,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Animation\empty.txt" />
+    <None Include="Assets\Effects\Explosions\empty.txt" />
     <None Include="Assets\Images\empty.txt" />
     <None Include="Assets\Models\empty.txt" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />

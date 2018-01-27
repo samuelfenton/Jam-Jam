@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Ai_Turret : AIRobot
 {
-    private GameObject m_Player;
-    public GameObject m_Bullet;
-    public float m_Distance = 5;
+    private Animator m_animator = null;
+
+    private GameObject m_player = null;
+    public GameObject m_bullet = null;
+    public float m_firingRange = 5;
     public float m_lookDistance = 10;
-    private float m_range = 0;
 
     [SerializeField]
     private float m_fireDelay = 1.0f;
     private bool m_canFire = true;
+
+    private bool m_wakeupSequence = true;
 
     [SerializeField]
     private Vector3 m_bulletSpawnPos = Vector3.zero;
@@ -29,58 +32,54 @@ public class Ai_Turret : AIRobot
     private GameObject m_turretGunModel = null;
 
 
-    // Use this for initialization
-    void Start ()
+    private void Start()
     {
-		
-	}
+        m_animator = GetComponent<Animator>();
+        m_animator.speed = 0;
+    }
 
     // Update is called once per frame
     public override void Update()
     {
         base.Update();
+        
+        m_player = GameObject.FindGameObjectWithTag("Player");
 
-        m_Player = GameObject.FindGameObjectWithTag("Player");
-
-        if(m_Player != null)
+        if (m_wakeupSequence)
         {
-            m_range = Vector3.Distance(m_Player.transform.position, transform.position);
+            if (CanSeePlayer())
+                m_animator.speed = 1;
 
-           //TODO can see player
-            if (m_range < m_lookDistance)
+            if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
+                m_animator.enabled = false;
+                m_wakeupSequence = false;
+            }
+        }
+        else
+        {
+            if (m_player != null)
+            {
+                float m_playerDistance = Vector3.Distance(m_player.transform.position, transform.position);
+
                 Look();
-                if(m_range < m_Distance && m_canFire)
-                {
+
+                if (m_playerDistance < m_firingRange && m_canFire && CanSeePlayer())
+                { 
                     Shoot();
                 }
             }
         }
-	}
+    }
 
     void Look()
     {
-        //Vector3 lookGunDir = m_Player.transform.position - m_turretGunModel.transform.position;
-
-        //m_turretBaseModel.transform.LookAt(m_Player.transform);
-
-        //Yaw
-        //Update Yaw
-        //Vector3 localEulerBase = m_turretBaseModel.transform.localEulerAngles;
-
-        //localEulerBase.y += aimX * m_rotationSpeed;
-        //localEulerBase.z = 0.0f;
-
-        //m_turretBaseModel.transform.localEulerAngles = localEulerBase;
+        m_turretBaseModel.transform.LookAt(m_player.transform);
     }
 
     void Shoot()
     {
-
-        Instantiate(m_Bullet, transform.TransformPoint(m_bulletSpawnPos), transform.rotation);
-
-        //need make timer for bullets and rotaion speed
-        //make ray cast so dont shoot threq walls
+        Instantiate(m_bullet, m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), m_turretGunModel.transform.rotation);
 
         m_canFire = false;
         Invoke("EnableFiring", m_fireDelay);
@@ -91,6 +90,18 @@ public class Ai_Turret : AIRobot
     {
         m_canFire = true;
     }
+
+    private bool CanSeePlayer()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), m_player.transform.position - m_turretGunModel.transform.TransformPoint(m_bulletSpawnPos), out hit, m_lookDistance))
+        {
+            if (hit.collider.tag == "Player")
+                return true;
+        }
+        return false;
+    }
+
 
 
 }
