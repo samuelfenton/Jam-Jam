@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Credits : MonoBehaviour
+public class Credits : BaseCharacter
 {
 
     [SerializeField]
-    private GameObject m_CreditsText;
-    private Vector3 m_Direction;
-    [SerializeField]
-    private float m_Speed;
+    private GameObject m_Explosions;
+
+
 
 
     // Use this for initialization
@@ -18,11 +17,19 @@ public class Credits : MonoBehaviour
 		
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	public override void Update()
     {
+        base.Update();
+    }
+
+    public override void OnDeath()
+    {
+        base.OnDeath();
+
+        Instantiate(m_Explosions, transform.position, Quaternion.identity);
+
+        Destroy(gameObject);
 
 
-        m_CreditsText.transform.Translate((Vector3.up * m_Speed)* Time.deltaTime);
-	}
+    }
 }
