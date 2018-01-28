@@ -54,4 +54,14 @@ public class Ai_roomba : AIRobot
         transform.LookAt(m_nodes[m_nodeIndex].transform.position);
 
     }
+
+    public GameObject[] GetNodes()
+    {
+        return m_nodes;
+    }
+
+    public void SetNodes(GameObject[] nodes)
+    {
+        m_nodes = nodes;
+    }
 }

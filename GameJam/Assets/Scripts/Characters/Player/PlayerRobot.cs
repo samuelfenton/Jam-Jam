@@ -7,11 +7,18 @@ public class PlayerRobot : BaseCharacter
     [SerializeField]
     private float m_trasmitRange = 2.0f;
 
+    public float m_timer = 0;
+
     [SerializeField]
     protected Vector3 m_cameraOffset = Vector3.zero;
 
     [SerializeField]
     protected GameObject m_charaterModelHolder = null;
+
+    private void OnEnable()
+    {
+        m_timer = 0.0f;
+    }
 
     // Update is called once per frame
     public override void Update ()

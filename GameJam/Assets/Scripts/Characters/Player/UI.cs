@@ -28,7 +28,8 @@ public class UI : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if(player!= null)
         {
-            float hackingPercent = player.GetComponent<BaseCharacter>().m_timer / m_timeToHack;
+            player.GetComponent<PlayerRobot>().m_timer += Time.deltaTime;
+            float hackingPercent = player.GetComponent<PlayerRobot>().m_timer / m_timeToHack;
 
             if (hackingPercent >= 1)
             {
