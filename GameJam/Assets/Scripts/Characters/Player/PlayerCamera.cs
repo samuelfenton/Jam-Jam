@@ -83,7 +83,7 @@ public class PlayerCamera : MonoBehaviour
                 m_transmittingTimer += Time.deltaTime;
 
                 if (m_transmittingTimer >= m_transmittingTime)
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    SceneManager.LoadScene("EndCredits");
                 else
                 {
                     transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);

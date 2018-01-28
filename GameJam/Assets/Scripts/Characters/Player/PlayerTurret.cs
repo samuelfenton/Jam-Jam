@@ -7,6 +7,8 @@ public class PlayerTurret : PlayerRobot
     private Animator m_animator = null;
 
     [SerializeField]
+    private GameObject m_aimer = null;
+    [SerializeField]
     private float m_rotationSpeed = 3.0f;
 
     [SerializeField]
@@ -31,8 +33,13 @@ public class PlayerTurret : PlayerRobot
         m_animator = GetComponent<Animator>();
     }
 
-	// Update is called once per frame
-	public override void Update ()
+    void OnEnable()
+    {
+        m_aimer.SetActive(true);
+    }
+
+    // Update is called once per frame
+    public override void Update ()
     {
         //Disbale animator on idle
         if(m_animator.enabled)

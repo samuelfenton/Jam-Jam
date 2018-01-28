@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Play : MonoBehaviour {
-
-    [SerializeField]
-    private int m_SceneIndex;
-
+public class Play : MonoBehaviour
+{
     // Use this for initialization
     void awake()
     {
@@ -22,6 +19,6 @@ public class Play : MonoBehaviour {
 
     public void OnClick()
     {
-        SceneManager.LoadScene(m_SceneIndex);
+        SceneManager.LoadScene("Main");
     }
 }

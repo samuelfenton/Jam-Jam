@@ -226,7 +226,6 @@
     <None Include="Assets\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
     <None Include="Assets\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
     <None Include="Assets\Prefabs\empty.txt" />
-    <None Include="Assets\Scenes\empty.txt" />
     <None Include="Assets\Scripts\Characters\AI\empty.txt" />
     <None Include="Assets\Scripts\empty.txt" />
     <None Include="Assets\ShaderForge\Editor\InternalResources\GPU Rendering\Common\ExtractChannel.shader" />
