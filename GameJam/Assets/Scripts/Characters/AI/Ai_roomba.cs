@@ -34,7 +34,7 @@ public class Ai_roomba : AIRobot
     void GoToNode()
     {
         Vector3 movementDir = m_nodes[m_nodeIndex].transform.position - gameObject.transform.position;
-        movementDir.z = 0.0f;
+        movementDir.y = 0.0f;
         m_rbCharacter.velocity = movementDir.normalized * m_forwardSpeed;
     }
 

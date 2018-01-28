@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private enum CAMERA_STATE {FIXED, TRANSMITTING};
+    private enum CAMERA_STATE {FIXED, TRANSMITTING, DEATH_TRANSMISSION, END_GAME, END_TRANSMISSION };
     private CAMERA_STATE m_cameraState = CAMERA_STATE.FIXED;
 
     private GameObject m_destinationObject = null;
@@ -28,11 +29,11 @@ public class PlayerCamera : MonoBehaviour
     {
 		
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-		switch(m_cameraState)
+        switch (m_cameraState)
         {
             case CAMERA_STATE.FIXED:
 
@@ -47,11 +48,50 @@ public class PlayerCamera : MonoBehaviour
                 {
                     transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
                     transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
-                    TransmitColour(m_transmittingTimer/ m_transmittingTime);
+                    TransmitColour(m_transmittingTimer / m_transmittingTime);
+                }
+                break;
+            case CAMERA_STATE.DEATH_TRANSMISSION:
+
+                //lerp from initial to destination transform
+                m_transmittingTimer += Time.deltaTime;
+
+                if (m_transmittingTimer >= m_transmittingTime)
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                else
+                {
+                    transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
+                    transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
+                }
+                break;
+
+            case CAMERA_STATE.END_GAME:
+                //lerp from initial to destination transform
+                m_transmittingTimer += Time.deltaTime;
+
+                if (m_transmittingTimer >= m_transmittingTime)
+                    EndTransmission();
+                else
+                {
+                    transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
+                    transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
+                }
+                break;
+
+            case CAMERA_STATE.END_TRANSMISSION:
+                //lerp from initial to destination transform
+                m_transmittingTimer += Time.deltaTime;
+
+                if (m_transmittingTimer >= m_transmittingTime)
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                else
+                {
+                    transform.position = Vector3.Lerp(m_intialPosition, m_destinationPosition, m_transmittingTimer / m_transmittingTime);
+                    transform.rotation = Quaternion.Lerp(m_intialRotation, m_destinationRotation, m_transmittingTimer / m_transmittingTime);
                 }
                 break;
         }
-	}
+    }
 
     public void SetTrasmit(GameObject destinationObject)
     {
@@ -114,5 +154,44 @@ public class PlayerCamera : MonoBehaviour
         {
             renderer.material.SetFloat("_Emmisivechange", 1 - ( 2 * colourPercent));
         }
+    }
+
+    public void OnPlayerDeath(Vector3 position, Quaternion rotation)
+    {
+        transform.parent = null;
+        m_intialPosition = transform.position;
+        m_intialRotation = transform.rotation;
+
+        m_destinationPosition = position;
+        m_destinationRotation = rotation;
+
+        m_transmittingTimer = 0.0f;
+        m_cameraState = CAMERA_STATE.DEATH_TRANSMISSION;
+    }
+
+    public void OnEndGame(Vector3 position)
+    {
+        transform.parent = null;
+        m_intialPosition = transform.position;
+        m_intialRotation = transform.rotation;
+
+        m_destinationPosition = position;
+        m_destinationRotation = Quaternion.Euler(45.0f, 180.0f, 0.0f);
+
+        m_transmittingTimer = 0.0f;
+        m_cameraState = CAMERA_STATE.END_GAME;
+    }
+
+    public void EndTransmission()
+    {
+        transform.parent = null;
+        m_intialPosition = transform.position;
+        m_intialRotation = transform.rotation;
+
+        m_destinationPosition = transform.TransformPoint(new Vector3(0.0f, 1.0f, -3.0f) * 2);
+        m_destinationRotation = transform.rotation;
+
+        m_transmittingTimer = 0.0f;
+        m_cameraState = CAMERA_STATE.END_TRANSMISSION;
     }
 }

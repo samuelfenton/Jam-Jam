@@ -17,9 +17,6 @@ public class BaseCharacter : MonoBehaviour
 
         if (m_health < 0.0f)
             OnDeath();
-
-        //if (m_timer > 30.0f)
-        //    OnDeath();
     }
 
     public void TakeDamage(float damage)
@@ -31,6 +28,14 @@ public class BaseCharacter : MonoBehaviour
     {
         if (m_deathEffect != null)
             Destroy(Instantiate(m_deathEffect, transform.position, Quaternion.identity), 5.0f);
-        Destroy(this.gameObject);
+
+        if(tag != "Player")
+            Destroy(this.gameObject);
+        else
+        {
+            GameManager.instance.m_canvasUI.GetComponentInChildren<UI>().PlayDamageMessage();
+            GameManager.instance.DeathTrasmit(transform.position + Vector3.up + Vector3.back, transform.rotation * Quaternion.Euler(70.0f, 0.0f, 0.0f));
+            Destroy(this.gameObject);
+        }
     }
 }

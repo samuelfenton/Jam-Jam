@@ -7,8 +7,6 @@ public class PlayerRoomba : PlayerRobot
     [SerializeField]
     private float m_forwardSpeed = 10.0f;
     [SerializeField]
-    private float m_strafeSpeed = 5.0f;
-    [SerializeField]
     private float m_rotationSpeed = 3.0f;
 
     [SerializeField]

@@ -5,55 +5,63 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
+    [SerializeField]
+    private float m_timeToHack = 30.0f;
 
     [SerializeField]
-    private Slider m_Health;
-    [SerializeField]
-    private Slider m_Timer;
-    [SerializeField]
-    private Image m_Hack;
-    [SerializeField]
-    private Image m_Threat;
-    [SerializeField]
-    private Image m_Search;
-     [SerializeField]
-    private Image m_Identified;
+    private GameObject m_quarantineMessage = null;
 
+    [SerializeField]
+    private GameObject m_damageMessage = null;
 
-    //the times between alerts anti-virus happen 
     [SerializeField]
-    private float m_FirstThreat;
-    [SerializeField]
-    private float m_SecondThreat;
-    [SerializeField]
-    private float m_FirstSearch;
-    [SerializeField]
-    private float m_secondSearch;
-    [SerializeField]
-    private float m_IdentifiedTimer;
+    private Image m_hackingSlider = null;
 
+    //Fading
+    GameObject fadingObject;
+    float timeBetweenFades;
+    float fadeInAmount;
 
-    BaseCharacter Player;
-
-    // Use this for initialization
-    void Start ()
+    // Update is called once per frame
+    void Update ()
     {
-        m_Hack.enabled = false;
-        m_Threat.enabled = false;
-        m_Search.enabled = false;
-        m_Identified.enabled = false;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if(player!= null)
+        {
+            float hackingPercent = player.GetComponent<BaseCharacter>().m_timer / m_timeToHack;
+
+            if (hackingPercent >= 1)
+            {
+                player.GetComponent<BaseCharacter>().OnDeath();
+
+                fadingObject = m_quarantineMessage;
+                timeBetweenFades = 0.05f;
+                fadeInAmount = 0.02f;
+
+                Invoke("FadeInText", timeBetweenFades);
+            }
+            m_hackingSlider.fillAmount = hackingPercent;
+        }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void FadeInText()
     {
-        m_Health.value = Player.m_health;
+        Color colour = fadingObject.GetComponent<Text>().color;
+        colour.a += fadeInAmount;
+        fadingObject.GetComponent<Text>().color = colour;
 
-        m_Timer.value = Player.m_timer;
+        if (colour.a <1)
+        {
+            Invoke("FadeInText", timeBetweenFades);
+        }
+    }
 
-        m_Timer.maxValue = 30;
+    public void PlayDamageMessage()
+    {
+        fadingObject = m_damageMessage;
+        timeBetweenFades = 0.05f;
+        fadeInAmount = 0.02f;
 
-       
-
+        Invoke("FadeInText", timeBetweenFades);
     }
 }

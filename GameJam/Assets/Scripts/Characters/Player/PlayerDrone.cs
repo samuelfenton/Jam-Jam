@@ -14,8 +14,6 @@ public class PlayerDrone : PlayerRobot
     private float m_rotationSpeed = 3.0f;
 
     private Rigidbody m_rbCharacter = null;
-    [SerializeField]
-    private GameObject m_charaterModelHolder = null;
 
     [SerializeField]
     private float m_leanAmount = 1.0f;

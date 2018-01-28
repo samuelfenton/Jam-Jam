@@ -10,6 +10,9 @@ public class PlayerRobot : BaseCharacter
     [SerializeField]
     protected Vector3 m_cameraOffset = Vector3.zero;
 
+    [SerializeField]
+    protected GameObject m_charaterModelHolder = null;
+
     // Update is called once per frame
     public override void Update ()
     {
@@ -48,6 +51,7 @@ public class PlayerRobot : BaseCharacter
     {
         jumpObject.tag = "Player";
         GameManager.instance.Trasmit(jumpObject);
+        tag = "Untagged";
         OnDeath();
         this.enabled = false;
     }
@@ -62,6 +66,11 @@ public class PlayerRobot : BaseCharacter
     public virtual Transform GetCameraAnchor()
     {
         return gameObject.transform;
+    }
+
+    public GameObject GetModel()
+    {
+        return m_charaterModelHolder;
     }
 
 }
